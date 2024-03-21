@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+</head>
+<body>
+    <style>
+        #selectField{
+            visibility: hidden;
+        }
+        button{
+            background-color: white;
+            border: solid rgba(54, 54, 54, 0.194);
+            border-radius: 5px;
+        }
+        button:hover{
+            cursor: pointer;
+            background-color: rgba(72, 72, 72, 0.156);
+        }
+        
+        
+        /* body{
+            background-color: black;
+            color: white;
+        } */
+    </style>
+    <script>
+        var inputs = [];
+        let i = 0;
+
+        //sets default of default values
+        let defGradeVal = 4;
+        let defWeightVal = 1;
+        
+        function addDiv2(){//duplicates fields in sets while keeping individuality
+            
+
+            //defines divs
+            let container = document.getElementById("list"); //contains all fields
+
+            // creates div for new fields
+            var fieldDiv = document.createElement("div");
+
+            //finds fields
+            var slct = document.getElementById("Grade");
+            var mult = document.getElementById("input");
+            
+            //clones fields
+            let cloneSlct = slct.cloneNode(true);
+            let cloneMult = mult.cloneNode(true);
+
+            //adjusts placeholder for already assigned default values
+            cloneSlct.placeholder = "Grade (default: " + defGradeVal + ")"
+            cloneMult.placeholder = "Weight (default:" + defWeightVal + ")"
+            
+            //changes individual id's
+            cloneMult.id = 'input' + i;
+            cloneSlct.id = "Grade" + i;
+
+            fieldDiv.id = "field" + i;
+
+            inputs.push(cloneSlct.id);
+
+            //adds div for fields
+            container.appendChild(fieldDiv);
+            
+            //adds fields to field div
+            fieldDiv.appendChild(cloneSlct);
+            fieldDiv.appendChild(cloneMult);
+
+            i++;   
+        }
+        
+        function calculate(x){
+            //array for all final grades
+            let grades = [];
+
+            let sum = 0;
+
+            
+            for(let j=0; j<i; j++){//adding (grades*input) values to array for every set of grade and input fields
+                let Grade = document.getElementById("Grade" + j);
+                let Input = document.getElementById("input" + j);
+                let product = 0;
+
+                // Sets Grade and Weight input values
+                let weightValue = parseFloat(Input.value);
+                let gradeValue = parseFloat(Grade.value);
+
+                //sets default for grade if there is no input
+                if(isNaN(gradeValue)) gradeValue = defGradeVal;
+                
+                //sets default for weight if there is no input
+                if(isNaN(weightValue)){weightValue = defWeightVal;}
+
+                //adds the (grade*weight) grade to array
+                product = gradeValue*weightValue;
+                grades.push(product);
+            }
+            
+            
+            for(let j=0; j<grades.length; j++){//adds up grades (that are multiplied with the weight), to use as numerator
+                sum += grades[j];
+            }
+
+            let sumOfWeights = 0;
+
+            
+            for(let j=0; j<i; j++){//collects sum of every input value, to use as denominater
+                let thisInput = "input" + j;
+                let Input = document.getElementById(thisInput);
+
+                //Sets default if no input
+                let weightValue = parseFloat(Input.value)
+                if(isNaN(weightValue)) weightValue = defWeightVal;
+
+                sumOfWeights += weightValue;
+                
+            }
+            //gets average or final grade
+            sum /= sumOfWeights;
+            
+            //displays final class grade (Rounds to hundredth)
+            if(i>0){ 
+                document.getElementById("answer").innerHTML = "Grade: " + round(sum, 1000);
+            }
+        }
+        function round(x, y){//Rounds x to nearest yth
+            return (Math.round((x)*y))/y;
+        }
+
+        // addEventListener("keydown", enterCalc);
+        // function enterCalc(x){
+        //     if(x.key === "Enter"){
+        //         calculate();
+        //     }
+        // }
+
+
+        function addNumDiv(){//adds x divs according to value in numGrades
+            let x = document.getElementById("numGrades").value;
+            for(let j = 0; j < Number(x); j++){
+                addDiv2();
+            }
+        }
+        
+        function removeDiv(){//removes latest field div added
+            if(i>0){
+                let x = document.getElementById("field" + (--i));
+                x.remove();
+            }
+        }
+        function clearFields(){//clears all field divs
+            let x = i;
+            if(i>0){
+                for(let j = 0; j < x; j++){
+                    removeDiv();
+                    console.log(j);
+                }
+            }
+        }
+        function setGraDef(){//sets grade default (changes default grade variable)
+            defGradeVal = parseFloat(document.getElementById("defGrade").value);
+
+            //changes placeholder text
+            for(let j = 0; j < i; j++){
+                document.getElementById("Grade" + j).placeholder = 'Grade (default: ' + defGradeVal + ")";
+            }
+        }
+        
+        function setWeiDef(){//sets weight default (changes default grade variable)
+            defWeightVal = parseFloat(document.getElementById("defWeight").value);
+            
+            //changes placeholder text
+            for(let j = 0; j < i; j++){
+                document.getElementById("input" + j).placeholder = 'Weight (default: ' + defWeightVal + ")";
+            }    
+        }
+
+    </script>
+
+
+<h1>Grade Calculator: 4.0 Scale</h1>
+<div>
+    <input type="Number" placeholder="Number of Assignments" id="numGrades" >
+    <button onclick="addNumDiv()">Add</button>
+    <button id="addGrades" onclick="clearFields(); addNumDiv();" >Set</button>
+</div>
+<div id="buttons">
+    <br><button id="add" onclick="addDiv2()">+</button>
+    <button id="remove" onclick="removeDiv()">-</button>
+    <button id="clear" onclick="clearFields()">Clear</button>
+</div>
+    <div class="container" id="list">
+        
+    </div>
+    <button onclick="calculate()">Calculate</button>
+    <p id="answer">Grade: </p>
+    <div id="selectField">
+        <input type="number" id="Grade" placeholder="Grade (default: 4)">
+        <input type="number" id="input" placeholder="Weight (default: 1)">
+        
+    </div>
+    <input type="number" placeholder="Set Default Grade Value" id="defGrade"><button onclick="setGraDef()">Set</button></input><br>
+    <input type="number" placeholder="Set Default Weight Value" id="defWeight"><button onclick="setWeiDef()">Set</button></input>
+    
+    
+</body>
+</html>
