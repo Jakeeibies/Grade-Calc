@@ -5,74 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Calculator</title>
 </head>
-<body>
+<body onload="start()">
     <style>
+        h5{
+            text-align: end;
+            margin-right: 15px;
+        }
+        h1{
+            text-align: center;
+            font-size: 40px;
+        }
+        body{
+            font-family: Arial, sans-serif;
+            background-color: rgb(188,228,218);
+            margin: 0;
+            padding: 0;
+            
+        }
+        input{
+            background-color: rgba(255, 255, 255, 0.805);
+        }
+
+        button{
+            background-color: rgba(55, 110, 77, 0.773);
+            border: solid 0px;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px;
+
+        }
+        button:hover{
+            background-color: rgba(22, 43, 30, 0.773);
+        }
+        .button-container button{
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+        .button-container{
+            text-align: center;
+        }
+
+        #list{
+            visibility: visible;
+        }
         #selectField{
             visibility: hidden;
         }
-        button{
-            background-color: white;
-            border: solid rgba(54, 54, 54, 0.194);
+        .container{
+            /* visibility: hidden; */
+
+            margin:20px auto;
+            max-width: 600px;
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
             border-radius: 5px;
+            background-color: #5050503a;
+
+            
         }
-        button:hover{
-            cursor: pointer;
-            background-color: rgba(72, 72, 72, 0.156);
+        .container input{
+            animation: fadeIn 0.35s ease;
+
+        }
+        input[type="number"]{
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 15px;
+
+        }
+        .selectField{
+            display: flex;
+        }
+        .selectField input{
+            flex: 1;
+            margin-right: 10px;
+        }
+
+       .input-container{
+            text-align: center;
+            margin-bottom: 10px;
+       }
+       .input-container input[type="number"]{
+            width: 200px;
+            margin: 0 5px;
+            text-align: center;
+       }
+       #Grade-Calc{
+            width: 130px;
+            text-align: center;
+            margin: 15px auto;
+            border: 0px solid black;
+            border-radius: 10px;
+            /* color: white; */
+            /* background-color: rgba(30, 92, 79, 0.485); */
+            background-color: rgba(255, 255, 255, 0.492);
+
+       }
+       #Grade-Calc p{
+            font-size: 25px;
+       }
+
+
+
+       @keyframes fadeIn{
+            from{
+                opacity: 0.5;
+            }
+            to{
+                opacity: 1;
+            }
+       }
+
+       
+       @keyframes fadeOut{
+            from{
+                opacity: 1;
+            }
+            to{
+                opacity: 0;
+            }
+       }
+        
+        .input.delete{
+            animation: fadeOut 0.15s ease;
         }
         
-        
-        /* body{
-            background-color: black;
-            color: white;
-        } */
     </style>
     <script>
-        var inputs = [];
+        //counts input sets
         let i = 0;
-
+    
         //sets default of default values
         let defGradeVal = 4;
         let defWeightVal = 1;
-        
-        function addDiv2(){//duplicates fields in sets while keeping individuality
-            
-
-            //defines divs
-            let container = document.getElementById("list"); //contains all fields
-
-            // creates div for new fields
-            var fieldDiv = document.createElement("div");
-
-            //finds fields
-            var slct = document.getElementById("Grade");
-            var mult = document.getElementById("input");
-            
-            //clones fields
-            let cloneSlct = slct.cloneNode(true);
-            let cloneMult = mult.cloneNode(true);
-
-            //adjusts placeholder for already assigned default values
-            cloneSlct.placeholder = "Grade (default: " + defGradeVal + ")"
-            cloneMult.placeholder = "Weight (default:" + defWeightVal + ")"
-            
-            //changes individual id's
-            cloneMult.id = 'input' + i;
-            cloneSlct.id = "Grade" + i;
-
-            fieldDiv.id = "field" + i;
-
-            inputs.push(cloneSlct.id);
-
-            //adds div for fields
-            container.appendChild(fieldDiv);
-            
-            //adds fields to field div
-            fieldDiv.appendChild(cloneSlct);
-            fieldDiv.appendChild(cloneMult);
-
-            i++;   
+        function start(){
+            addDiv2();
         }
-        
+       
+        function addDiv2(){//duplicates fields in sets while keeping individuality
+            if(i<69){
+
+                //defines divs
+                let container = document.getElementById("list"); //contains all fields
+    
+                // creates div for new fields
+                var fieldDiv = document.createElement("div");
+    
+                //finds fields
+                var slct = document.getElementById("Grade");
+                var mult = document.getElementById("input");
+                
+                //clones fields
+                let cloneSlct = slct.cloneNode(true);
+                let cloneMult = mult.cloneNode(true);
+    
+                //adjusts placeholder to already assigned default values
+                cloneSlct.placeholder = "Grade (default: " + defGradeVal + ")"
+                cloneMult.placeholder = "Weight (default:" + defWeightVal + ")"
+                
+                //changes individual id's
+                cloneMult.id = 'input' + i;
+                cloneSlct.id = "Grade" + i;
+    
+                fieldDiv.id = "field" + i;
+                fieldDiv.className = "selectField";
+                
+                
+                //adds div for fields
+                container.appendChild(fieldDiv);
+                
+                //adds fields to field div
+                fieldDiv.appendChild(cloneSlct);
+                fieldDiv.appendChild(cloneMult);
+    
+                i++;   
+            }
+        }
         function calculate(x){
             //array for all final grades
             let grades = [];
@@ -117,48 +235,46 @@
                 if(isNaN(weightValue)) weightValue = defWeightVal;
 
                 sumOfWeights += weightValue;
-                
             }
             //gets average or final grade
             sum /= sumOfWeights;
             
             //displays final class grade (Rounds to hundredth)
             if(i>0){ 
-                document.getElementById("answer").innerHTML = "Grade: " + round(sum, 1000);
+                document.getElementById("answer").innerHTML = round(sum, 1000);
             }
         }
         function round(x, y){//Rounds x to nearest yth
             return (Math.round((x)*y))/y;
         }
-
-        // addEventListener("keydown", enterCalc);
-        // function enterCalc(x){
-        //     if(x.key === "Enter"){
-        //         calculate();
-        //     }
-        // }
-
-
         function addNumDiv(){//adds x divs according to value in numGrades
             let x = document.getElementById("numGrades").value;
             for(let j = 0; j < Number(x); j++){
                 addDiv2();
             }
         }
-        
         function removeDiv(){//removes latest field div added
             if(i>0){
                 let x = document.getElementById("field" + (--i));
-                x.remove();
+
+                let inputs = x.querySelectorAll(".input");
+                inputs.forEach(input => {
+                    input.classList.add("delete");
+                    input.addEventListener("animationend", function(){
+                        input.remove();
+                    });
+                });
+                x.addEventListener("animationend", function(){
+                    x.remove();
+                });
             }
         }
+
+
         function clearFields(){//clears all field divs
-            let x = i;
-            if(i>0){
-                for(let j = 0; j < x; j++){
-                    removeDiv();
-                    console.log(j);
-                }
+            while(i>0){
+                let x = document.getElementById("field" + (--i));
+                x.remove();
             }
         }
         function setGraDef(){//sets grade default (changes default grade variable)
@@ -181,31 +297,43 @@
 
     </script>
 
-
-<h1>Grade Calculator: 4.0 Scale</h1>
+<!-- <h5>Assisted by ChatGPT</h5> -->
+<h1>Grade Calculator</h1>
 <div>
-    <input type="Number" placeholder="Number of Assignments" id="numGrades" >
-    <button onclick="addNumDiv()">Add</button>
-    <button id="addGrades" onclick="clearFields(); addNumDiv();" >Set</button>
+    <div class = "input-container">
+        <input type="number" placeholder="Number of Assignments" id="numGrades"  >
+    </div>
+    <div class="button-container">
+        <button onclick="addNumDiv()">Add</button>
+        <button id="addGrades" onclick="clearFields(); addNumDiv();" >Set</button>
+    </div>
+    
 </div>
-<div id="buttons">
-    <br><button id="add" onclick="addDiv2()">+</button>
+<br>
+<div id="buttons" class="button-container">
+    <button id="add" onclick="addDiv2()">+</button>
     <button id="remove" onclick="removeDiv()">-</button>
     <button id="clear" onclick="clearFields()">Clear</button>
 </div>
     <div class="container" id="list">
         
     </div>
-    <button onclick="calculate()">Calculate</button>
-    <p id="answer">Grade: </p>
+    <div class="button-container">
+        <button onclick="calculate()">Calculate</button>
+    </div>
+    <div id="Grade-Calc">
+        <p id="answer"> </p>
+    </div>
+    <div class = "input-container">
+        
+        <input type="number" placeholder="Set Default Grade Value" id="defGrade"><button onclick="setGraDef()">Set</button></input><br>
+        <input type="number" placeholder="Set Default Weight Value" id="defWeight"><button onclick="setWeiDef()">Set</button></input>
+    </div>
     <div id="selectField">
-        <input type="number" id="Grade" placeholder="Grade (default: 4)">
-        <input type="number" id="input" placeholder="Weight (default: 1)">
+        <input type="number" id="Grade" placeholder="Grade (default: 4)" class="input">
+        <input type="number" id="input" placeholder="Weight (default: 1)" class="input">
         
     </div>
-    <input type="number" placeholder="Set Default Grade Value" id="defGrade"><button onclick="setGraDef()">Set</button></input><br>
-    <input type="number" placeholder="Set Default Weight Value" id="defWeight"><button onclick="setWeiDef()">Set</button></input>
-    
     
 </body>
 </html>
